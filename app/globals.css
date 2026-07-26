@@ -4637,6 +4637,10 @@ img {
     font-size: clamp(58px, 19.5vw, 76px);
   }
 
+  .launch-copy h2 {
+    font-size: clamp(40px, 12.5vw, 53px);
+  }
+
   .hero-visual {
     height: 445px;
   }
@@ -4679,6 +4683,10 @@ img {
   .driver-copy h2,
   .launch-copy h2 {
     font-size: clamp(65px, 20vw, 84px);
+  }
+
+  .launch-copy h2 {
+    font-size: clamp(40px, 12.5vw, 43px);
   }
 
   .restaurant-copy h2 span {

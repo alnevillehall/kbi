@@ -1,6 +1,6 @@
 # KBI launch site
 
-A production-ready coming-soon experience for **KBI**, a Kingston-first food
+A production-ready coming-soon experience for **KBI**, a Montego Bay-first food
 delivery product. The site gives customers, restaurants, and drivers a clear
 route into the launch while presenting a polished preview of the product.
 
@@ -8,7 +8,7 @@ route into the launch while presenting a polished preview of the product.
 
 - Brand: **KBI**
 - Tagline: **Good food. On di way.**
-- Initial market: Kingston, Jamaica
+- Initial market: Montego Bay, Jamaica
 - Status: coming soon; no public launch date is claimed
 - Primary conversion: customer waitlist
 - Secondary conversions: founding restaurant and driver applications

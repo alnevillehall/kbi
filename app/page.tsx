@@ -11,13 +11,17 @@ export default async function Home() {
     logo: new URL("/icon.png", siteUrl).toString(),
     serviceType: "Food delivery",
     description:
-      "A food-delivery platform connecting customers, restaurants and drivers in Kingston, Jamaica.",
+      "A food-delivery platform connecting customers, restaurants and drivers in Montego Bay, Jamaica.",
     areaServed: {
       "@type": "City",
-      name: "Kingston",
+      name: "Montego Bay",
       containedInPlace: {
-        "@type": "Country",
-        name: "Jamaica",
+        "@type": "AdministrativeArea",
+        name: "St. James",
+        containedInPlace: {
+          "@type": "Country",
+          name: "Jamaica",
+        },
       },
     },
     provider: {

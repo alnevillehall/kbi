@@ -34,11 +34,11 @@ export async function generateMetadata(): Promise<Metadata> {
       template: "%s | KBI",
     },
     description:
-      "Kingston’s next food-delivery app is on the way. Join KBI for early access, become a founding restaurant, or apply to drive.",
+      "Montego Bay’s next food-delivery app is on the way. Join KBI for early access, become a founding restaurant, or apply to drive.",
     applicationName: "KBI",
     keywords: [
       "food delivery Jamaica",
-      "Kingston food delivery",
+      "Montego Bay food delivery",
       "restaurant delivery app",
       "delivery driver Jamaica",
       "KBI",
@@ -51,14 +51,14 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "KBI",
       title: "KBI — Good food. On di way.",
       description:
-        "A new route from Kingston’s kitchens to your door. Join the launch list.",
+        "A new route from Montego Bay’s kitchens to your door. Join the launch list.",
       url: "/",
       images: [
         {
-          url: "/og.jpg",
+          url: "/og-montego-bay.jpg",
           width: 1200,
           height: 630,
-          alt: "KBI — Good food. On di way. Coming soon to Kingston.",
+          alt: "KBI — Good food. On di way. Coming soon to Montego Bay.",
         },
       ],
     },
@@ -66,8 +66,8 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: "KBI — Good food. On di way.",
       description:
-        "A new route from Kingston’s kitchens to your door. Join the launch list.",
-      images: ["/og.jpg"],
+        "A new route from Montego Bay’s kitchens to your door. Join the launch list.",
+      images: ["/og-montego-bay.jpg"],
     },
     icons: {
       icon: "/icon.png",

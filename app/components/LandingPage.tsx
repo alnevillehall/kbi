@@ -110,7 +110,7 @@ const faqs = [
   {
     question: "Where will it be available?",
     answer:
-      "Kingston and St. Andrew are the first route. We’ll expand carefully based on restaurant coverage, driver availability and what the launch community tells us.",
+      "Montego Bay is KBI’s first route. We’ll expand carefully based on restaurant coverage, driver availability and what the launch community tells us.",
   },
   {
     question: "How can customers get early access?",
@@ -300,7 +300,7 @@ function HeroPreview() {
           <div className="phone-location">
             <div>
               <span>DELIVER TO</span>
-              <strong>New Kingston</strong>
+              <strong>Montego Bay</strong>
             </div>
             <div className="phone-avatar">M</div>
           </div>
@@ -336,7 +336,7 @@ function HeroPreview() {
             <div className="phone-featured-card__meta">
               <span>★ 4.8 preview</span>
               <span>$$</span>
-              <span>New Kingston</span>
+              <span>Montego Bay</span>
             </div>
           </article>
           <div className="phone-list-heading">
@@ -354,7 +354,7 @@ function HeroPreview() {
             </div>
             <div>
               <strong>Ackee Morning Box</strong>
-              <span>Portland Pot · $</span>
+              <span>Island Pot · $</span>
             </div>
             <span className="phone-mini-row__add">+</span>
           </div>
@@ -459,7 +459,7 @@ function FeatureScreen({ active }: { active: FeatureKey }) {
       >
         {active === "discover" && (
           <div className="app-screen app-screen--discover">
-            <div className="app-screen__eyebrow">NEW KINGSTON</div>
+            <div className="app-screen__eyebrow">MONTEGO BAY</div>
             <div className="app-screen__heading">
               <h3>What’s good?</h3>
               <div className="mini-avatar">M</div>
@@ -489,7 +489,7 @@ function FeatureScreen({ active }: { active: FeatureKey }) {
               <div className="screen-food-card__content">
                 <div>
                   <strong>Yardie Bowl</strong>
-                  <span>Jamaican · New Kingston</span>
+                  <span>Jamaican · Montego Bay</span>
                 </div>
                 <span className="rating">★ 4.8</span>
               </div>
@@ -506,7 +506,7 @@ function FeatureScreen({ active }: { active: FeatureKey }) {
                   fill
                   sizes="120px"
                 />
-                <span>Portland Pot</span>
+                <span>Island Pot</span>
               </div>
               <div>
                 <Image
@@ -538,7 +538,7 @@ function FeatureScreen({ active }: { active: FeatureKey }) {
               </button>
             </div>
             <div className="detail-copy">
-              <span className="detail-kicker">PORTLAND POT</span>
+              <span className="detail-kicker">ISLAND POT</span>
               <h3>Ackee Morning Box</h3>
               <p>
                 Ackee, saltfish, callaloo and two golden fried dumplings.
@@ -680,7 +680,7 @@ function FeatureScreen({ active }: { active: FeatureKey }) {
               </div>
               <div>
                 <span>DELIVER TO</span>
-                <strong>New Kingston</strong>
+                <strong>Montego Bay</strong>
               </div>
               <ChevronDown size={16} />
             </div>
@@ -992,9 +992,8 @@ function CustomerWaitlistForm({ compact = false }: { compact?: boolean }) {
             }
           >
             <option value="">Choose your area</option>
-            <option>Kingston</option>
-            <option>St. Andrew</option>
-            <option>St. Catherine</option>
+            <option>Montego Bay</option>
+            <option>Elsewhere in St. James</option>
             <option>Elsewhere in Jamaica</option>
           </select>
           <FieldError
@@ -1367,7 +1366,7 @@ function DriverForm() {
             name="location"
             required
             autoComplete="address-level1"
-            placeholder="e.g. Kingston"
+            placeholder="e.g. Montego Bay"
             aria-invalid={Boolean(form.fieldErrors.location)}
             aria-describedby={
               form.fieldErrors.location ? "driverLocation-error" : undefined
@@ -1587,7 +1586,7 @@ function AppDialog({
   const isLegal = kind === "privacy" || kind === "terms";
   const title =
     kind === "restaurant"
-      ? "Put your kitchen on Kingston’s first route."
+      ? "Put your kitchen on Montego Bay’s first route."
       : kind === "driver"
         ? "Be one of the first to move with KBI."
         : kind === "privacy"
@@ -1749,7 +1748,7 @@ export function LandingPage({ year }: { year: number }) {
           </div>
           <p>
             <span>LAUNCHING SOON</span>
-            <strong>Kingston, Jamaica</strong>
+            <strong>Montego Bay, Jamaica</strong>
           </p>
           <a href="#launch">
             Get the route update
@@ -1823,7 +1822,7 @@ export function LandingPage({ year }: { year: number }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <SectionLabel>Kingston’s next food move</SectionLabel>
+              <SectionLabel>Montego Bay’s next food move</SectionLabel>
             </motion.div>
             <motion.h1
               id="hero-title"
@@ -1842,7 +1841,7 @@ export function LandingPage({ year }: { year: number }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.18 }}
             >
-              Discover Kingston’s good food, order without the runaround, and
+              Discover Montego Bay’s good food, order without the runaround, and
               watch every handoff. KBI is coming soon.
             </motion.p>
             <motion.div
@@ -2198,7 +2197,7 @@ export function LandingPage({ year }: { year: number }) {
                 <span>Less noise.</span>
               </h2>
               <p className="restaurant-copy__lead">
-                Join the first group shaping how Kingston orders. KBI is being
+                Join the first group shaping how Montego Bay orders. KBI is being
                 built to give kitchens reach without adding chaos to service.
               </p>
             </Reveal>
@@ -2232,7 +2231,7 @@ export function LandingPage({ year }: { year: number }) {
                 <ArrowRight size={18} />
               </button>
               <p>
-                <Sparkles size={16} /> Applications are open for Kingston.
+                <Sparkles size={16} /> Applications are open for Montego Bay.
               </p>
             </Reveal>
           </div>
@@ -2412,8 +2411,8 @@ export function LandingPage({ year }: { year: number }) {
             <Reveal className="launch-copy">
               <SectionLabel>Coming soon</SectionLabel>
               <h2 id="launch-title">
-                Kingston is
-                <span>stop one.</span>
+                Montego Bay
+                <span>is stop one.</span>
               </h2>
               <p>
                 The route is taking shape. Join now for build updates, early
@@ -2428,7 +2427,7 @@ export function LandingPage({ year }: { year: number }) {
             <Reveal className="launch-roadmap" delay={0.08}>
               <div className="roadmap-title">
                 <span>LAUNCH ROUTE</span>
-                <strong>Kingston / Jamaica</strong>
+                <strong>Montego Bay / Jamaica</strong>
               </div>
               <ol>
                 <li className="is-current">
@@ -2450,7 +2449,7 @@ export function LandingPage({ year }: { year: number }) {
                 <li>
                   <span>03</span>
                   <div>
-                    <strong>Kingston opens</strong>
+                    <strong>Montego Bay opens</strong>
                     <p>Public app release</p>
                   </div>
                   <small>LAUNCH</small>
@@ -2538,7 +2537,7 @@ export function LandingPage({ year }: { year: number }) {
             <MapPin size={40} fill="currentColor" />
           </div>
           <Reveal>
-            <SectionLabel light>Kingston, this one is ours</SectionLabel>
+            <SectionLabel light>Montego Bay, this one is ours</SectionLabel>
             <h2 id="closing-title">
               Let’s move food
               <span>forward.</span>
@@ -2566,7 +2565,7 @@ export function LandingPage({ year }: { year: number }) {
           <div className="footer-brand">
             <BrandMark inverse />
             <p>GOOD FOOD. ON DI WAY.</p>
-            <span>Launching first in Kingston, Jamaica.</span>
+            <span>Launching first in Montego Bay, Jamaica.</span>
           </div>
           <div className="footer-column">
             <span>MOVE AROUND</span>
@@ -2600,7 +2599,7 @@ export function LandingPage({ year }: { year: number }) {
               Terms
             </button>
           </div>
-          <span>PRE-LAUNCH / JAMAICA</span>
+          <span>PRE-LAUNCH / MONTEGO BAY</span>
         </div>
       </footer>
 
