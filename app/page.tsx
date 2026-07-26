@@ -1,10 +1,15 @@
 import { LandingPage } from "./components/LandingPage";
+import { getSiteUrl } from "@/lib/site-url";
 
-export default function Home() {
+export default async function Home() {
+  const siteUrl = await getSiteUrl();
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "ONDI",
+    name: "KBI",
+    url: siteUrl.toString(),
+    logo: new URL("/icon.png", siteUrl).toString(),
+    serviceType: "Food delivery",
     description:
       "A food-delivery platform connecting customers, restaurants and drivers in Kingston, Jamaica.",
     areaServed: {
@@ -17,17 +22,18 @@ export default function Home() {
     },
     provider: {
       "@type": "Organization",
-      name: "ONDI",
-      email: "hello@ondi.app",
+      name: "KBI",
     },
   };
 
   return (
     <>
-      <LandingPage />
+      <LandingPage year={new Date().getUTCFullYear()} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
       />
     </>
   );

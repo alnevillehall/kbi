@@ -1,5 +1,10 @@
 import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  index,
+  integer,
+  sqliteTable,
+  text,
+} from "drizzle-orm/sqlite-core";
 
 /**
  * Migration representation of the table also created defensively by the
@@ -27,9 +32,15 @@ export const interestSubmissions = sqliteTable("interest_submissions", {
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const interestRateLimits = sqliteTable("interest_rate_limits", {
-  key: text("key").primaryKey(),
-  windowStart: integer("window_start").notNull(),
-  count: integer("count").notNull().default(1),
-  updatedAt: text("updated_at").notNull(),
-});
+export const interestRateLimits = sqliteTable(
+  "interest_rate_limits",
+  {
+    key: text("key").primaryKey(),
+    windowStart: integer("window_start").notNull(),
+    count: integer("count").notNull().default(1),
+    updatedAt: text("updated_at").notNull(),
+  },
+  (table) => [
+    index("interest_rate_limits_window_start_idx").on(table.windowStart),
+  ],
+);

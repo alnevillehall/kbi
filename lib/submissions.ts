@@ -29,7 +29,7 @@ const CREATE_INTEREST_SUBMISSIONS_TABLE = `
 `;
 
 const INSERT_INTEREST_SUBMISSION = `
-  INSERT INTO interest_submissions (
+  INSERT OR IGNORE INTO interest_submissions (
     id,
     type,
     email,
@@ -72,6 +72,11 @@ const DELETE_EXPIRED_RATE_LIMITS = `
   DELETE FROM interest_rate_limits WHERE window_start < ?
 `;
 
+const CREATE_RATE_LIMIT_WINDOW_INDEX = `
+  CREATE INDEX IF NOT EXISTS interest_rate_limits_window_start_idx
+  ON interest_rate_limits (window_start)
+`;
+
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1_000;
 const RATE_LIMIT_MAX_REQUESTS = 20;
 const RATE_LIMIT_RETENTION_MS = 24 * RATE_LIMIT_WINDOW_MS;
@@ -82,7 +87,10 @@ export interface SubmissionReceipt {
 }
 
 export interface SubmissionService {
-  create(submission: ValidatedInterestSubmission): Promise<SubmissionReceipt>;
+  create(
+    submission: ValidatedInterestSubmission,
+    idempotencyKey: string,
+  ): Promise<SubmissionReceipt>;
 }
 
 export class SubmissionStorageUnavailableError extends Error {
@@ -183,14 +191,13 @@ class D1SubmissionService implements SubmissionService {
 
   async create(
     submission: ValidatedInterestSubmission,
+    idempotencyKey: string,
   ): Promise<SubmissionReceipt> {
-    const id = crypto.randomUUID();
+    const id = idempotencyKey;
     const createdAt = new Date().toISOString();
     const fields = toStoredFields(submission);
 
-    await this.database
-      .prepare(CREATE_INTEREST_SUBMISSIONS_TABLE)
-      .run();
+    await ensureSubmissionTables(this.database);
 
     await this.database
       .prepare(INSERT_INTEREST_SUBMISSION)
@@ -225,6 +232,19 @@ export function getSubmissionService(): SubmissionService {
   }
 
   return new D1SubmissionService(env.DB);
+}
+
+let tableInitialization: Promise<void> | null = null;
+let lastRateLimitCleanup = 0;
+
+function ensureSubmissionTables(database: D1Database): Promise<void> {
+  tableInitialization ??= Promise.all([
+    database.prepare(CREATE_INTEREST_SUBMISSIONS_TABLE).run(),
+    database.prepare(CREATE_INTEREST_RATE_LIMITS_TABLE).run(),
+    database.prepare(CREATE_RATE_LIMIT_WINDOW_INDEX).run(),
+  ]).then(() => undefined);
+
+  return tableInitialization;
 }
 
 function getClientAddress(request: Request): string {
@@ -265,16 +285,20 @@ export async function enforceSubmissionRateLimit(
     Math.ceil((windowStart + RATE_LIMIT_WINDOW_MS - now) / 1_000),
   );
   const addressHash = await hashRateLimitKey(
-    `ondi-interest:${getClientAddress(request)}`,
+    `kbi-interest:${getClientAddress(request)}`,
   );
   const key = `${addressHash}:${windowStart}`;
   const updatedAt = new Date(now).toISOString();
 
-  await env.DB.prepare(CREATE_INTEREST_RATE_LIMITS_TABLE).run();
-  await env.DB
-    .prepare(DELETE_EXPIRED_RATE_LIMITS)
-    .bind(now - RATE_LIMIT_RETENTION_MS)
-    .run();
+  await ensureSubmissionTables(env.DB);
+
+  if (now - lastRateLimitCleanup > RATE_LIMIT_WINDOW_MS) {
+    await env.DB
+      .prepare(DELETE_EXPIRED_RATE_LIMITS)
+      .bind(now - RATE_LIMIT_RETENTION_MS)
+      .run();
+    lastRateLimitCleanup = now;
+  }
 
   const result = await env.DB
     .prepare(UPSERT_INTEREST_RATE_LIMIT)

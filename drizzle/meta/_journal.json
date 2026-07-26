@@ -15,6 +15,13 @@
       "when": 1785040772358,
       "tag": "0001_careful_naoko",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1785084770951,
+      "tag": "0002_opposite_rhodey",
+      "breakpoints": true
     }
   ]
 }

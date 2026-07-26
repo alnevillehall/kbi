@@ -4,7 +4,9 @@ import NextImage from "next/image";
 import {
   AnimatePresence,
   motion,
+  useMotionValue,
   useReducedMotion,
+  useTransform,
 } from "framer-motion";
 import {
   Apple,
@@ -106,7 +108,7 @@ const featureTabs: Array<{
 
 const faqs = [
   {
-    question: "When will ONDI launch?",
+    question: "When will KBI launch?",
     answer:
       "We’re currently building the launch network and testing the first version. There’s no public date yet; waitlist members will hear first when early access opens.",
   },
@@ -118,7 +120,7 @@ const faqs = [
   {
     question: "How can customers get early access?",
     answer:
-      "Join the launch list with your email and location. We’ll send product updates and invite small groups to test ONDI before the wider release.",
+      "Join the launch list with your email and location. We’ll send product updates and invite small groups to test KBI before the wider release.",
   },
   {
     question: "How can restaurants join?",
@@ -136,14 +138,14 @@ const faqs = [
       "Use the early-driver form and tell us your location, vehicle type and general availability. We don’t ask for ID numbers or document uploads at this stage.",
   },
   {
-    question: "Will ONDI be on iOS and Android?",
+    question: "Will KBI be on iOS and Android?",
     answer:
       "Yes. The customer app is being designed for iPhone and Android. Official download links will only appear once the app is ready for release.",
   },
   {
     question: "How will applicants be contacted?",
     answer:
-      "We’ll use the email or phone number supplied in the relevant form. ONDI will never ask for payment, passwords or sensitive identity documents in a first-contact message.",
+      "We’ll use the email or phone number supplied in the relevant form. KBI will never ask for payment, passwords or sensitive identity documents in a first-contact message.",
   },
 ];
 
@@ -158,12 +160,12 @@ function BrandMark({ inverse = false }: { inverse?: boolean }) {
     <a
       className={`brand-mark${inverse ? " brand-mark--inverse" : ""}`}
       href="#top"
-      aria-label="ONDI home"
+      aria-label="KBI home"
     >
       <span className="brand-mark__pin" aria-hidden="true">
         <span />
       </span>
-      <span className="brand-mark__word">ONDI</span>
+      <span className="brand-mark__word">KBI</span>
     </a>
   );
 }
@@ -232,23 +234,38 @@ function PrimaryLink({
 
 function HeroPreview() {
   const reduceMotion = useReducedMotion();
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const phoneX = useTransform(tiltX, (value) => value * 5);
+  const phoneY = useTransform(tiltY, (value) => value * -6);
+  const phoneRotate = useTransform(tiltX, (value) => -2 + value * 1.5);
+  const noticeX = useTransform(tiltX, (value) => value * -13);
+  const noticeY = useTransform(tiltY, (value) => value * -9);
+  const noticeRotate = useTransform(tiltX, (value) => 2 + value);
+  const foodX = useTransform(tiltX, (value) => value * 15);
+  const foodY = useTransform(tiltY, (value) => value * 10);
+  const foodRotate = useTransform(tiltX, (value) => -7 - value * 2);
+  const progressX = useTransform(tiltX, (value) => value * -9);
+  const progressY = useTransform(tiltY, (value) => value * -7);
+  const progressRotate = useTransform(tiltX, (value) => -3 - value);
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     if (reduceMotion || event.pointerType !== "mouse") return;
     const bounds = event.currentTarget.getBoundingClientRect();
-    setTilt({
-      x: (event.clientX - bounds.left) / bounds.width - 0.5,
-      y: (event.clientY - bounds.top) / bounds.height - 0.5,
-    });
+    tiltX.set((event.clientX - bounds.left) / bounds.width - 0.5);
+    tiltY.set((event.clientY - bounds.top) / bounds.height - 0.5);
   };
 
   return (
     <div
       className="hero-preview"
       onPointerMove={handlePointerMove}
-      onPointerLeave={() => setTilt({ x: 0, y: 0 })}
-      aria-label="Preview of the ONDI mobile ordering experience"
+      onPointerLeave={() => {
+        tiltX.set(0);
+        tiltY.set(0);
+      }}
+      role="img"
+      aria-label="Preview of the KBI mobile ordering experience"
     >
       <div className="hero-preview__halo" aria-hidden="true" />
 
@@ -270,13 +287,9 @@ function HeroPreview() {
 
       <motion.div
         className="hero-phone"
-        initial={reduceMotion ? false : { opacity: 0, y: 54, rotate: 5 }}
-        animate={{
-          opacity: 1,
-          y: tilt.y * -6,
-          x: tilt.x * 5,
-          rotate: -2 + tilt.x * 1.5,
-        }}
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        style={{ x: phoneX, y: phoneY, rotate: phoneRotate }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="phone-shell">
@@ -369,13 +382,9 @@ function HeroPreview() {
 
       <motion.div
         className="order-notice"
-        initial={reduceMotion ? false : { opacity: 0, x: 30, y: -8 }}
-        animate={{
-          opacity: 1,
-          x: tilt.x * -13,
-          y: tilt.y * -9,
-          rotate: 2 + tilt.x,
-        }}
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        style={{ x: noticeX, y: noticeY, rotate: noticeRotate }}
         transition={{ duration: 0.7, delay: 0.45 }}
       >
         <div className="order-notice__icon">
@@ -390,13 +399,9 @@ function HeroPreview() {
 
       <motion.div
         className="hero-food-card"
-        initial={reduceMotion ? false : { opacity: 0, x: -30, rotate: -8 }}
-        animate={{
-          opacity: 1,
-          x: tilt.x * 15,
-          y: tilt.y * 10,
-          rotate: -7 + tilt.x * -2,
-        }}
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        style={{ x: foodX, y: foodY, rotate: foodRotate }}
         transition={{ duration: 0.75, delay: 0.3 }}
       >
         <div className="hero-food-card__image">
@@ -405,7 +410,6 @@ function HeroPreview() {
             alt="Ackee and saltfish with fried dumplings"
             fill
             sizes="140px"
-            priority
           />
         </div>
         <div>
@@ -416,13 +420,9 @@ function HeroPreview() {
 
       <motion.div
         className="order-progress-card"
-        initial={reduceMotion ? false : { opacity: 0, y: 28, rotate: -4 }}
-        animate={{
-          opacity: 1,
-          x: tilt.x * -9,
-          y: tilt.y * -7,
-          rotate: -3 - tilt.x,
-        }}
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        style={{ x: progressX, y: progressY, rotate: progressRotate }}
         transition={{ duration: 0.8, delay: 0.55 }}
       >
         <div className="order-progress-card__top">
@@ -750,15 +750,22 @@ function useInterestForm(type: InterestType) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [message, setMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const startedAt = useRef(0);
+  const idempotencyKey = useRef("");
 
   useEffect(() => {
-    startedAt.current = Date.now();
+    idempotencyKey.current = crypto.randomUUID();
   }, []);
 
   const onInput = (event: FormEvent<HTMLFormElement>) => {
     const target = event.target as HTMLInputElement | HTMLSelectElement;
-    if (!target.name || !fieldErrors[target.name]) return;
+    if (!target.name) return;
+
+    if (status === "error") {
+      setMessage("");
+      setStatus("idle");
+    }
+
+    if (!fieldErrors[target.name]) return;
 
     setFieldErrors((current) => {
       const next = { ...current };
@@ -785,22 +792,33 @@ function useInterestForm(type: InterestType) {
       setFieldErrors(nextErrors);
       setMessage("Check the highlighted details and try again.");
       setStatus("error");
+      window.setTimeout(() => {
+        form
+          .querySelector<HTMLElement>('[aria-invalid="true"]')
+          ?.focus();
+      }, 0);
       return;
     }
 
     setFieldErrors({});
-    setMessage("");
+    setMessage("Sending your details securely…");
     setStatus("submitting");
+    if (!idempotencyKey.current) {
+      idempotencyKey.current = crypto.randomUUID();
+    }
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 12_000);
 
     try {
       const response = await fetch("/api/interest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           type,
           data: validation.data,
           website: String(formData.get("website") ?? ""),
-          startedAt: startedAt.current,
+          idempotencyKey: idempotencyKey.current,
         }),
       });
 
@@ -824,6 +842,11 @@ function useInterestForm(type: InterestType) {
                 .map(([key, messages]) => [key, messages[0]]),
             ),
           );
+          window.setTimeout(() => {
+            form
+              .querySelector<HTMLElement>('[aria-invalid="true"]')
+              ?.focus();
+          }, 0);
         }
         throw new Error(
           body?.error?.message ??
@@ -842,11 +865,15 @@ function useInterestForm(type: InterestType) {
       setStatus("success");
     } catch (error) {
       setMessage(
-        error instanceof Error
+        error instanceof DOMException && error.name === "AbortError"
+          ? "The request took too long. Check your connection and try again."
+          : error instanceof Error
           ? error.message
           : "Something went wrong. Please try again.",
       );
       setStatus("error");
+    } finally {
+      window.clearTimeout(timeoutId);
     }
   };
 
@@ -880,9 +907,12 @@ function FormFeedback({
     <div
       className={`form-feedback form-feedback--${status}`}
       role={status === "error" ? "alert" : "status"}
+      aria-live={status === "error" ? "assertive" : "polite"}
     >
       {status === "success" ? (
         <CheckCircle2 size={18} aria-hidden="true" />
+      ) : status === "submitting" ? (
+        <Clock3 size={18} aria-hidden="true" />
       ) : (
         <span className="form-feedback__mark" aria-hidden="true">
           !
@@ -901,6 +931,7 @@ function CustomerWaitlistForm({ compact = false }: { compact?: boolean }) {
       className={`waitlist-form${compact ? " waitlist-form--compact" : ""}`}
       onSubmit={form.onSubmit}
       onInput={form.onInput}
+      aria-busy={form.status === "submitting"}
       noValidate
     >
       <div className="honeypot" aria-hidden="true">
@@ -923,6 +954,7 @@ function CustomerWaitlistForm({ compact = false }: { compact?: boolean }) {
             id={compact ? "email-compact" : "waitlist-email"}
             name="email"
             type="email"
+            required
             inputMode="email"
             autoComplete="email"
             placeholder="you@example.com"
@@ -951,6 +983,13 @@ function CustomerWaitlistForm({ compact = false }: { compact?: boolean }) {
             name="location"
             defaultValue=""
             aria-invalid={Boolean(form.fieldErrors.location)}
+            aria-describedby={
+              form.fieldErrors.location
+                ? compact
+                  ? "location-compact-error"
+                  : "waitlist-location-error"
+                : undefined
+            }
           >
             <option value="">Choose your area</option>
             <option>Kingston</option>
@@ -1002,6 +1041,7 @@ function RestaurantForm() {
       className="application-form"
       onSubmit={form.onSubmit}
       onInput={form.onInput}
+      aria-busy={form.status === "submitting"}
       noValidate
     >
       <div className="honeypot" aria-hidden="true">
@@ -1019,6 +1059,7 @@ function RestaurantForm() {
           <input
             id="businessName"
             name="businessName"
+            required
             autoComplete="organization"
             placeholder="Your restaurant name"
             autoFocus
@@ -1037,6 +1078,7 @@ function RestaurantForm() {
           <input
             id="contactName"
             name="contactName"
+            required
             autoComplete="name"
             placeholder="Full name"
             aria-invalid={Boolean(form.fieldErrors.contactName)}
@@ -1055,6 +1097,7 @@ function RestaurantForm() {
             id="restaurantEmail"
             name="email"
             type="email"
+            required
             inputMode="email"
             autoComplete="email"
             placeholder="name@restaurant.com"
@@ -1074,6 +1117,7 @@ function RestaurantForm() {
             id="restaurantPhone"
             name="phone"
             type="tel"
+            required
             inputMode="tel"
             autoComplete="tel"
             placeholder="+1 876…"
@@ -1092,6 +1136,7 @@ function RestaurantForm() {
           <input
             id="restaurantLocation"
             name="location"
+            required
             autoComplete="street-address"
             placeholder="Area or address"
             aria-invalid={Boolean(form.fieldErrors.location)}
@@ -1111,6 +1156,7 @@ function RestaurantForm() {
           <input
             id="cuisine"
             name="cuisine"
+            required
             placeholder="e.g. Jamaican, vegan, café"
             aria-invalid={Boolean(form.fieldErrors.cuisine)}
             aria-describedby={
@@ -1125,6 +1171,7 @@ function RestaurantForm() {
             id="locationCount"
             name="locationCount"
             type="number"
+            required
             inputMode="numeric"
             min="1"
             max="1000"
@@ -1146,6 +1193,7 @@ function RestaurantForm() {
           <select
             id="deliverySetup"
             name="deliverySetup"
+            required
             defaultValue=""
             aria-invalid={Boolean(form.fieldErrors.deliverySetup)}
             aria-describedby={
@@ -1195,6 +1243,7 @@ function RestaurantForm() {
           id="restaurantConsent"
           name="consent"
           type="checkbox"
+          required
           aria-invalid={Boolean(form.fieldErrors.consent)}
           aria-describedby={
             form.fieldErrors.consent ? "restaurantConsent-error" : undefined
@@ -1204,7 +1253,7 @@ function RestaurantForm() {
           <Check size={13} />
         </span>
         <span>
-          I agree that ONDI may contact me about becoming a launch partner.
+          I agree that KBI may contact me about becoming a launch partner.
         </span>
       </label>
       <FieldError
@@ -1245,6 +1294,7 @@ function DriverForm() {
       className="application-form"
       onSubmit={form.onSubmit}
       onInput={form.onInput}
+      aria-busy={form.status === "submitting"}
       noValidate
     >
       <div className="honeypot" aria-hidden="true">
@@ -1262,6 +1312,7 @@ function DriverForm() {
           <input
             id="driverName"
             name="fullName"
+            required
             autoComplete="name"
             placeholder="Your full name"
             autoFocus
@@ -1281,6 +1332,7 @@ function DriverForm() {
             id="driverEmail"
             name="email"
             type="email"
+            required
             inputMode="email"
             autoComplete="email"
             placeholder="you@example.com"
@@ -1297,6 +1349,7 @@ function DriverForm() {
             id="driverPhone"
             name="phone"
             type="tel"
+            required
             inputMode="tel"
             autoComplete="tel"
             placeholder="+1 876…"
@@ -1312,6 +1365,7 @@ function DriverForm() {
           <input
             id="driverLocation"
             name="location"
+            required
             autoComplete="address-level1"
             placeholder="e.g. Kingston"
             aria-invalid={Boolean(form.fieldErrors.location)}
@@ -1329,6 +1383,7 @@ function DriverForm() {
           <select
             id="vehicleType"
             name="vehicleType"
+            required
             defaultValue=""
             aria-invalid={Boolean(form.fieldErrors.vehicleType)}
             aria-describedby={
@@ -1353,6 +1408,7 @@ function DriverForm() {
           <select
             id="licenceStatus"
             name="licenceStatus"
+            required
             defaultValue=""
             aria-invalid={Boolean(form.fieldErrors.licenceStatus)}
             aria-describedby={
@@ -1379,6 +1435,7 @@ function DriverForm() {
           <select
             id="availability"
             name="availability"
+            required
             defaultValue=""
             aria-invalid={Boolean(form.fieldErrors.availability)}
             aria-describedby={
@@ -1405,6 +1462,7 @@ function DriverForm() {
           id="driverConsent"
           name="consent"
           type="checkbox"
+          required
           aria-invalid={Boolean(form.fieldErrors.consent)}
           aria-describedby={
             form.fieldErrors.consent ? "driverConsent-error" : undefined
@@ -1414,7 +1472,7 @@ function DriverForm() {
           <Check size={13} />
         </span>
         <span>
-          I agree that ONDI may contact me about launch-driver onboarding.
+          I agree that KBI may contact me about launch-driver onboarding.
         </span>
       </label>
       <FieldError id="driverConsent-error" message={form.fieldErrors.consent} />
@@ -1452,22 +1510,78 @@ function AppDialog({
   onClose: () => void;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
   const [closing, setClosing] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
+    returnFocusRef.current =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
     dialog.showModal();
+    const focusFrame = window.requestAnimationFrame(() => {
+      (
+        dialog.querySelector<HTMLElement>(
+          '.application-form input:not([type="hidden"]):not([tabindex="-1"])',
+        ) ??
+        dialog.querySelector<HTMLElement>(".dialog-close")
+      )?.focus();
+    });
 
     return () => {
+      window.cancelAnimationFrame(focusFrame);
       if (dialog.open) dialog.close();
+      returnFocusRef.current?.focus();
     };
   }, []);
 
   const requestClose = () => {
     if (closing) return;
+    if (reduceMotion) {
+      onClose();
+      return;
+    }
     setClosing(true);
     window.setTimeout(onClose, 170);
+  };
+
+  const handleDialogKeyDown = (event: KeyboardEvent<HTMLDialogElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      requestClose();
+      return;
+    }
+
+    if (event.key !== "Tab") return;
+
+    const focusable = Array.from(
+      event.currentTarget.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    ).filter(
+      (element) =>
+        element.getAttribute("aria-hidden") !== "true" &&
+        !element.closest(".honeypot"),
+    );
+
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (!first || !last) return;
+
+    const active = document.activeElement;
+    if (
+      event.shiftKey &&
+      (active === first || !event.currentTarget.contains(active))
+    ) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    }
   };
 
   const isLegal = kind === "privacy" || kind === "terms";
@@ -1475,7 +1589,7 @@ function AppDialog({
     kind === "restaurant"
       ? "Put your kitchen on Kingston’s first route."
       : kind === "driver"
-        ? "Be one of the first to move with ONDI."
+        ? "Be one of the first to move with KBI."
         : kind === "privacy"
           ? "Privacy, in plain language."
           : "Launch terms.";
@@ -1488,6 +1602,7 @@ function AppDialog({
         event.preventDefault();
         requestClose();
       }}
+      onKeyDown={handleDialogKeyDown}
       onClick={(event) => {
         if (event.target === event.currentTarget) requestClose();
       }}
@@ -1526,7 +1641,7 @@ function AppDialog({
         {kind === "privacy" && (
           <div className="legal-copy">
             <p>
-              ONDI collects only the details needed to manage early-access,
+              KBI collects only the details needed to manage early-access,
               restaurant and driver enquiries. We’ll use them to contact you
               about the launch flow you selected.
             </p>
@@ -1536,7 +1651,9 @@ function AppDialog({
               retention, access and deletion rights—will be published before
               public launch.
             </p>
-            <a href="mailto:hello@ondi.app">Questions? hello@ondi.app</a>
+            <a href="#launch" onClick={requestClose}>
+              Questions? Join the launch list.
+            </a>
           </div>
         )}
         {kind === "terms" && (
@@ -1548,12 +1665,14 @@ function AppDialog({
               shared directly before launch.
             </p>
             <p>
-              ONDI is currently a pre-launch product. App previews on this site
+              KBI is currently a pre-launch product. App previews on this site
               show the intended experience and may change as testing continues.
               Full customer, restaurant and driver terms will be available
               before the service opens.
             </p>
-            <a href="mailto:hello@ondi.app">Questions? hello@ondi.app</a>
+            <a href="#launch" onClick={requestClose}>
+              Questions? Join the launch list.
+            </a>
           </div>
         )}
       </div>
@@ -1561,13 +1680,14 @@ function AppDialog({
   );
 }
 
-export function LandingPage() {
+export function LandingPage({ year }: { year: number }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [modal, setModal] = useState<ModalKind>(null);
   const [activeFeature, setActiveFeature] =
     useState<FeatureKey>("discover");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const reduceMotion = useReducedMotion();
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleFeatureTabKeyDown = (
     event: KeyboardEvent<HTMLButtonElement>,
@@ -1601,6 +1721,19 @@ export function LandingPage() {
     return () => window.removeEventListener("resize", closeMenu);
   }, []);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handleEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMobileOpen(false);
+      window.requestAnimationFrame(() => mobileMenuButtonRef.current?.focus());
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [mobileOpen]);
+
   return (
     <div className="site-shell">
       <a className="skip-link" href="#main">
@@ -1632,12 +1765,13 @@ export function LandingPage() {
             <a href="#drivers">Drive with us</a>
           </div>
           <div className="nav-actions">
-            <a className="nav-text-link" href="mailto:hello@ondi.app">
-              Say hello
+            <a className="nav-text-link" href="#launch">
+              Stay in the loop
             </a>
             <PrimaryLink href="#launch">Join waitlist</PrimaryLink>
           </div>
           <button
+            ref={mobileMenuButtonRef}
             className="mobile-menu-button"
             type="button"
             aria-expanded={mobileOpen}
@@ -1659,7 +1793,7 @@ export function LandingPage() {
               exit={reduceMotion ? undefined : { opacity: 0, y: -12 }}
               transition={{ duration: 0.22 }}
             >
-              <div className="mobile-menu__index">ONDI / 01</div>
+              <div className="mobile-menu__index">KBI / 01</div>
               <a href="#journey" onClick={() => setMobileOpen(false)}>
                 <span>01</span> How it moves
               </a>
@@ -1709,7 +1843,7 @@ export function LandingPage() {
               transition={{ duration: 0.6, delay: 0.18 }}
             >
               Discover Kingston’s good food, order without the runaround, and
-              watch every handoff. ONDI is coming soon.
+              watch every handoff. KBI is coming soon.
             </motion.p>
             <motion.div
               className="hero-ctas"
@@ -1723,7 +1857,7 @@ export function LandingPage() {
                 type="button"
                 onClick={() => setModal("restaurant")}
               >
-                <span>Partner with ONDI</span>
+                <span>Partner with KBI</span>
                 <Store size={18} />
               </button>
             </motion.div>
@@ -1766,7 +1900,7 @@ export function LandingPage() {
             </Reveal>
             <Reveal className="section-heading__aside" delay={0.1}>
               <p>
-                ONDI is being built for every person who gets great food from
+                KBI is being built for every person who gets great food from
                 kitchen to doorstep.
               </p>
               <span>01 — 03</span>
@@ -1859,7 +1993,7 @@ export function LandingPage() {
               <button
                 type="button"
                 onClick={() => setModal("driver")}
-                aria-label="Apply to drive with ONDI"
+                aria-label="Apply to drive with KBI"
               >
                 <ArrowRight size={22} />
               </button>
@@ -1969,7 +2103,7 @@ export function LandingPage() {
             <div
               className="feature-tabs"
               role="tablist"
-              aria-label="ONDI app features"
+              aria-label="KBI app features"
             >
               {featureTabs.map((feature, index) => {
                 const Icon = feature.icon;
@@ -2042,7 +2176,7 @@ export function LandingPage() {
             </Reveal>
 
             <div className="showcase-index" aria-hidden="true">
-              <span>ONDI APP</span>
+              <span>KBI APP</span>
               <strong>
                 0{featureTabs.findIndex((item) => item.id === activeFeature) + 1}
                 /04
@@ -2064,7 +2198,7 @@ export function LandingPage() {
                 <span>Less noise.</span>
               </h2>
               <p className="restaurant-copy__lead">
-                Join the first group shaping how Kingston orders. ONDI is being
+                Join the first group shaping how Kingston orders. KBI is being
                 built to give kitchens reach without adding chaos to service.
               </p>
             </Reveal>
@@ -2105,7 +2239,10 @@ export function LandingPage() {
 
           <Reveal className="restaurant-visual" delay={0.1}>
             <div className="restaurant-visual__index">KITCHEN / 01</div>
-            <div className="dashboard-shell">
+            <p className="sr-only">
+              Preview of a restaurant dashboard with new and cooking orders.
+            </p>
+            <div className="dashboard-shell" inert aria-hidden="true">
               <div className="dashboard-top">
                 <BrandMark />
                 <div>
@@ -2191,7 +2328,7 @@ export function LandingPage() {
           </div>
 
           <Reveal className="driver-copy">
-            <SectionLabel light>Drive with ONDI</SectionLabel>
+            <SectionLabel light>Drive with KBI</SectionLabel>
             <h2 id="driver-title">
               Your road.
               <span>Your rhythm.</span>
@@ -2342,8 +2479,8 @@ export function LandingPage() {
             </Reveal>
             <Reveal className="faq-heading__contact" delay={0.1}>
               <p>Still wondering about something?</p>
-              <a href="mailto:hello@ondi.app">
-                hello@ondi.app <ArrowRight size={16} />
+              <a href="#launch">
+                Join the launch list <ArrowRight size={16} />
               </a>
             </Reveal>
           </div>
@@ -2439,18 +2576,14 @@ export function LandingPage() {
             <a href="#drivers">Drive with us</a>
           </div>
           <div className="footer-column">
-            <span>CONTACT</span>
-            <a href="mailto:hello@ondi.app">hello@ondi.app</a>
-            <a
-              href="https://www.instagram.com/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Instagram
-            </a>
-            <a href="https://x.com/" target="_blank" rel="noreferrer">
-              X / Twitter
-            </a>
+            <span>LAUNCH</span>
+            <a href="#launch">Join the waitlist</a>
+            <button type="button" onClick={() => setModal("restaurant")}>
+              Restaurant signup
+            </button>
+            <button type="button" onClick={() => setModal("driver")}>
+              Driver signup
+            </button>
           </div>
           <div className="footer-signoff" aria-hidden="true">
             <span>MADE FOR</span>
@@ -2458,7 +2591,7 @@ export function LandingPage() {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} ONDI. All routes reserved.</span>
+          <span>© {year} KBI. All routes reserved.</span>
           <div>
             <button type="button" onClick={() => setModal("privacy")}>
               Privacy

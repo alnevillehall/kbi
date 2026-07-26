@@ -1,16 +1,21 @@
+import js from "@eslint/js";
+import nextPlugin from "@next/eslint-plugin-next";
 import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import reactHooks from "eslint-plugin-react-hooks";
+import tseslint from "typescript-eslint";
 
 const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  reactHooks.configs.flat["recommended-latest"],
+  nextPlugin.configs["core-web-vitals"],
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
+    ".vinext/**",
+    "dist/**",
     "out/**",
     "build/**",
+    "drizzle/meta/**",
     "next-env.d.ts",
   ]),
 ]);

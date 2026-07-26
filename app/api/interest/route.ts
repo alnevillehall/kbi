@@ -14,8 +14,6 @@ import {
   SubmissionStorageUnavailableError,
 } from "@/lib/submissions";
 
-const MINIMUM_FILL_TIME_MS = 800;
-const MAX_FUTURE_CLOCK_SKEW_MS = 30_000;
 const MAX_REQUEST_BYTES = 16_384;
 
 const requestSchema = z
@@ -23,10 +21,7 @@ const requestSchema = z
     type: z.enum(["customer", "restaurant", "driver"]),
     data: z.unknown(),
     website: z.string().max(200).optional().default(""),
-    startedAt: z
-      .number({ error: "startedAt must be a timestamp in milliseconds." })
-      .int("startedAt must be a timestamp in milliseconds.")
-      .nonnegative("startedAt must be a timestamp in milliseconds."),
+    idempotencyKey: z.string().uuid("The submission ID is invalid."),
   })
   .strict();
 
@@ -194,31 +189,13 @@ export async function POST(request: Request) {
     );
   }
 
-  const { type, data, website, startedAt } = requestResult.data;
+  const { type, data, website, idempotencyKey } = requestResult.data;
 
   if (website.trim().length > 0) {
     return errorResponse(
       422,
       "spam_detected",
       "The submission could not be accepted.",
-    );
-  }
-
-  const elapsedTime = Date.now() - startedAt;
-
-  if (elapsedTime < -MAX_FUTURE_CLOCK_SKEW_MS) {
-    return errorResponse(
-      400,
-      "invalid_started_at",
-      "The form start time is invalid. Refresh the page and try again.",
-    );
-  }
-
-  if (elapsedTime < MINIMUM_FILL_TIME_MS) {
-    return errorResponse(
-      429,
-      "submitted_too_quickly",
-      "Please take a moment to review the form, then try again.",
     );
   }
 
@@ -236,6 +213,7 @@ export async function POST(request: Request) {
   try {
     const receipt = await getSubmissionService().create(
       submissionResult.submission,
+      idempotencyKey,
     );
 
     return jsonResponse(

@@ -6,9 +6,9 @@
   --cream: #f8f0e4;
   --paper: #fffaf2;
   --orange: #ff5a1f;
-  --orange-dark: #d83d0b;
+  --orange-dark: #c23a0b;
   --lime: #c8ff52;
-  --muted: #7b6c77;
+  --muted: #756570;
   --line: rgba(33, 16, 31, 0.15);
   --white-line: rgba(255, 250, 242, 0.16);
   --shadow: 0 24px 70px rgba(33, 16, 31, 0.16);
@@ -27,7 +27,6 @@ html {
 
 body {
   margin: 0;
-  overflow-x: hidden;
   background: var(--cream);
   color: var(--ink);
   font-family: var(--font-body);
@@ -90,8 +89,8 @@ img {
 }
 
 .site-shell {
-  min-width: 320px;
-  overflow: clip;
+  width: 100%;
+  max-width: 100%;
 }
 
 .skip-link {
@@ -1333,7 +1332,7 @@ img {
 }
 
 .audience-restaurant p {
-  color: rgba(33, 16, 31, 0.72);
+  color: rgba(33, 16, 31, 0.88);
 }
 
 .receipt {
@@ -1624,6 +1623,7 @@ img {
 }
 
 .showcase-section {
+  overflow: clip;
   background: var(--cream);
 }
 
@@ -2591,7 +2591,7 @@ img {
 .restaurant-copy__lead {
   max-width: 580px;
   margin: 30px 0 34px;
-  color: rgba(33, 16, 31, 0.72);
+  color: rgba(33, 16, 31, 0.88);
   font-size: 15px;
   line-height: 1.7;
 }
@@ -2627,8 +2627,9 @@ img {
 
 .benefit-list__item p {
   margin: 0;
-  color: rgba(33, 16, 31, 0.62);
-  font-size: 10px;
+  color: rgba(33, 16, 31, 0.82);
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .benefit-list__item > svg {
@@ -3093,12 +3094,12 @@ img {
   max-width: 250px;
   margin: 8px 0 0;
   color: rgba(255, 250, 242, 0.55);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
 .driver-benefit:first-child p {
-  color: rgba(33, 16, 31, 0.68);
+  color: rgba(33, 16, 31, 0.86);
 }
 
 .launch-section {
@@ -3353,7 +3354,7 @@ img {
 
 .field-group input::placeholder,
 .field-group textarea::placeholder {
-  color: #9b8b96;
+  color: var(--muted);
 }
 
 .field-group input:focus,
@@ -3427,6 +3428,16 @@ img {
 .form-feedback--success {
   background: rgba(200, 255, 82, 0.14);
   color: var(--lime);
+}
+
+.form-feedback--submitting {
+  background: rgba(255, 250, 242, 0.1);
+  color: var(--paper);
+}
+
+.app-dialog .form-feedback--submitting {
+  background: rgba(33, 16, 31, 0.07);
+  color: var(--ink);
 }
 
 .app-dialog .form-feedback--success {
@@ -3683,8 +3694,8 @@ img {
 }
 
 .footer-brand > span {
-  color: rgba(255, 250, 242, 0.48);
-  font-size: 9px;
+  color: rgba(255, 250, 242, 0.64);
+  font-size: 11px;
 }
 
 .footer-column {
@@ -3695,23 +3706,30 @@ img {
 
 .footer-column > span {
   margin-bottom: 10px;
-  color: rgba(255, 250, 242, 0.38);
-  font-size: 8px;
+  color: rgba(255, 250, 242, 0.62);
+  font-size: 10px;
   font-weight: 900;
   letter-spacing: 0.14em;
 }
 
-.footer-column a {
+.footer-column a,
+.footer-column button {
   display: inline-flex;
   min-height: 34px;
   align-items: center;
   gap: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: rgba(255, 250, 242, 0.7);
-  font-size: 10px;
+  cursor: pointer;
+  font-size: 12px;
   font-weight: 700;
+  text-align: left;
 }
 
-.footer-column a:hover {
+.footer-column a:hover,
+.footer-column button:hover {
   color: var(--lime);
 }
 
@@ -3722,8 +3740,8 @@ img {
 }
 
 .footer-signoff span {
-  color: rgba(255, 250, 242, 0.4);
-  font-size: 8px;
+  color: rgba(255, 250, 242, 0.64);
+  font-size: 10px;
   font-weight: 900;
   letter-spacing: 0.14em;
 }
@@ -3745,8 +3763,8 @@ img {
   margin: 60px auto 0;
   padding-top: 18px;
   border-top: 1px solid var(--white-line);
-  color: rgba(255, 250, 242, 0.38);
-  font-size: 8px;
+  color: rgba(255, 250, 242, 0.62);
+  font-size: 10px;
   letter-spacing: 0.08em;
 }
 
@@ -3758,9 +3776,9 @@ img {
 .footer-bottom button {
   min-height: 34px;
   background: transparent;
-  color: rgba(255, 250, 242, 0.55);
+  color: rgba(255, 250, 242, 0.7);
   cursor: pointer;
-  font-size: 8px;
+  font-size: 11px;
 }
 
 .footer-bottom > span:last-child {
@@ -3769,7 +3787,7 @@ img {
 
 .app-dialog {
   width: min(92vw, 840px);
-  max-height: 92vh;
+  max-height: 92dvh;
   margin: auto;
   padding: 0;
   overflow: visible;
@@ -3826,7 +3844,7 @@ img {
 
 .app-dialog__panel {
   position: relative;
-  max-height: 92vh;
+  max-height: 92dvh;
   overflow-y: auto;
   padding: 42px clamp(22px, 5vw, 54px) 36px;
   border: 1px solid rgba(255, 255, 255, 0.45);
@@ -3841,13 +3859,14 @@ img {
 }
 
 .dialog-close {
-  position: absolute;
+  position: sticky;
   z-index: 2;
   top: 18px;
-  right: 18px;
   display: grid;
   width: 42px;
   height: 42px;
+  margin-bottom: -42px;
+  margin-left: auto;
   place-items: center;
   border: 1px solid var(--line);
   border-radius: 50%;
@@ -3883,7 +3902,7 @@ img {
   max-width: 590px;
   margin: 0;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.65;
 }
 
@@ -3911,7 +3930,7 @@ img {
   margin-top: 18px;
   cursor: pointer;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.55;
 }
 
@@ -3940,7 +3959,7 @@ img {
 }
 
 .consent-row input:focus-visible + .consent-row__box {
-  outline: 3px solid var(--lime);
+  outline: 3px solid var(--ink);
   outline-offset: 2px;
 }
 
@@ -4234,13 +4253,17 @@ img {
   .hero-visual {
     height: 510px;
     margin-top: 5px;
+    overflow: clip;
   }
 
   .hero-preview {
+    position: absolute;
     top: 0;
+    left: 50%;
     width: 720px;
     scale: 0.72;
     transform-origin: top center;
+    translate: -50% 0;
   }
 
   .ecosystem-section,
@@ -4332,6 +4355,7 @@ img {
   .showcase-stage {
     display: block;
     min-height: 790px;
+    overflow: clip;
     padding: 18px 10px 44px;
   }
 
@@ -4428,8 +4452,12 @@ img {
   }
 
   .dashboard-shell {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     min-width: 520px;
     scale: 0.68;
+    translate: -50% -50%;
   }
 
   .restaurant-visual__ticket {
@@ -4560,20 +4588,20 @@ img {
 
   .app-dialog {
     width: min(94vw, 840px);
-    max-height: 94vh;
+    max-height: 94dvh;
   }
 
   .app-dialog__panel {
-    max-height: 94vh;
+    max-height: 94dvh;
     padding: 32px 18px 28px;
     border-radius: 14px;
   }
 
   .dialog-close {
     top: 12px;
-    right: 12px;
     width: 40px;
     height: 40px;
+    margin-bottom: -40px;
   }
 
   .dialog-heading {
@@ -4581,7 +4609,7 @@ img {
   }
 
   .dialog-heading h2 {
-    font-size: 45px;
+    font-size: 38px;
   }
 
   .form-grid {
@@ -4710,6 +4738,14 @@ img {
 
   .showcase-device {
     scale: 0.82;
+  }
+
+  .dashboard-shell {
+    scale: 0.54;
+  }
+
+  .dialog-heading h2 {
+    font-size: 34px;
   }
 
   .audience-driver__copy {

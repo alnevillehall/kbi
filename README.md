@@ -1,21 +1,20 @@
-# ONDI launch site
+# KBI launch site
 
-A production-ready coming-soon experience for **ONDI**, a Kingston-first food
+A production-ready coming-soon experience for **KBI**, a Kingston-first food
 delivery product. The site gives customers, restaurants, and drivers a clear
 route into the launch while presenting a polished preview of the product.
 
 ## Product direction
 
-- Brand: **ONDI**
+- Brand: **KBI**
 - Tagline: **Good food. On di way.**
 - Initial market: Kingston, Jamaica
 - Status: coming soon; no public launch date is claimed
 - Primary conversion: customer waitlist
 - Secondary conversions: founding restaurant and driver applications
 
-The brand name, concept domain (`ondi.app`), contact email
-(`hello@ondi.app`), and generic social links are launch-ready placeholders that
-should be confirmed before a custom-domain release.
+No custom domain, public contact email, or social profiles are assumed. Add
+those verified values before a public marketing release.
 
 ## Stack
 
@@ -58,15 +57,15 @@ All signup paths post JSON to `POST /api/interest`:
   status, and consent
 
 The endpoint performs server-side Zod validation, rejects oversized payloads
-and the honeypot field, enforces a minimum form-fill interval, and applies a
-hashed-IP D1 rate limit. It returns structured field errors without echoing
-private submission data.
+and the honeypot field, deduplicates retries with a client-generated request
+ID, and applies a hashed-IP D1 rate limit. It returns structured field errors
+without echoing private submission data.
 
 ## Search and sharing
 
 The app derives its canonical origin from the production request and includes
 Open Graph and Twitter cards, JSON-LD service data, `sitemap.xml`, `robots.txt`,
-favicon assets, and a bespoke ONDI share image.
+favicon assets, and a bespoke KBI share image.
 
 ## Photography
 

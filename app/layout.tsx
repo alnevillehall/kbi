@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Manrope } from "next/font/google";
 import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
@@ -14,6 +14,13 @@ const bebas = Bebas_Neue({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8f0e4" },
+    { media: "(prefers-color-scheme: dark)", color: "#21101f" },
+  ],
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   const metadataBase = await getSiteUrl();
 
@@ -23,43 +30,44 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: "/",
     },
     title: {
-      default: "ONDI — Good food. On di way.",
-      template: "%s | ONDI",
+      default: "KBI — Good food. On di way.",
+      template: "%s | KBI",
     },
     description:
-      "Kingston’s next food-delivery app is on the way. Join ONDI for early access, become a founding restaurant, or apply to drive.",
-    applicationName: "ONDI",
+      "Kingston’s next food-delivery app is on the way. Join KBI for early access, become a founding restaurant, or apply to drive.",
+    applicationName: "KBI",
     keywords: [
       "food delivery Jamaica",
       "Kingston food delivery",
       "restaurant delivery app",
       "delivery driver Jamaica",
-      "ONDI",
+      "KBI",
     ],
-    authors: [{ name: "ONDI" }],
-    creator: "ONDI",
+    authors: [{ name: "KBI" }],
+    creator: "KBI",
     openGraph: {
       type: "website",
       locale: "en_JM",
-      siteName: "ONDI",
-      title: "ONDI — Good food. On di way.",
+      siteName: "KBI",
+      title: "KBI — Good food. On di way.",
       description:
         "A new route from Kingston’s kitchens to your door. Join the launch list.",
+      url: "/",
       images: [
         {
-          url: "/og.png",
-          width: 1730,
-          height: 909,
-          alt: "ONDI — Good food. On di way. Coming soon to Kingston.",
+          url: "/og.jpg",
+          width: 1200,
+          height: 630,
+          alt: "KBI — Good food. On di way. Coming soon to Kingston.",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: "ONDI — Good food. On di way.",
+      title: "KBI — Good food. On di way.",
       description:
         "A new route from Kingston’s kitchens to your door. Join the launch list.",
-      images: ["/og.png"],
+      images: ["/og.jpg"],
     },
     icons: {
       icon: "/icon.png",
@@ -75,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en-JM">
       <body className={`${manrope.variable} ${bebas.variable}`}>
         {children}
       </body>
