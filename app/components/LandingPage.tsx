@@ -322,7 +322,7 @@ function HeroPreview() {
             <div className="phone-featured-card__image">
               <Image
                 src="/brown-stew-fish.jpg"
-                alt="Brown-stew fish with rice and peas"
+                alt="Brown-stew lunch with rice and peas"
                 fill
                 sizes="260px"
                 priority
@@ -483,7 +483,7 @@ function FeatureScreen({ active }: { active: FeatureKey }) {
               <div className="screen-food-card__image">
                 <Image
                   src="/brown-stew-fish.jpg"
-                  alt="Brown-stew fish lunch"
+                  alt="Brown-stew lunch with rice and peas"
                   fill
                   sizes="280px"
                 />
