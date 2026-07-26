@@ -211,7 +211,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    const receipt = await getSubmissionService().create(
+    const submissionService = await getSubmissionService();
+    const receipt = await submissionService.create(
       submissionResult.submission,
       idempotencyKey,
     );

@@ -18,11 +18,13 @@ those verified values before a public marketing release.
 
 ## Stack
 
-- Next.js App Router via vinext
+- Next.js App Router, deployed through Vinext on Sites or native Next.js on
+  Vercel
 - React 19, TypeScript, Tailwind CSS
 - Framer Motion and Lucide icons
 - Zod validation shared by the UI and API
-- Cloudflare D1 persistence through the `DB` binding
+- Cloudflare D1 persistence through the `DB` binding on Sites
+- Neon Postgres persistence through `DATABASE_URL` on Vercel
 - Drizzle schema and migration files
 
 ## Local development
@@ -42,9 +44,37 @@ or third-party form credentials are required.
 ```bash
 npm test
 npm run db:generate
+npm run db:generate:postgres
 ```
 
-`npm test` runs linting, TypeScript validation, and the production build.
+`npm test` runs linting, TypeScript validation, and both production builds.
+
+It verifies both production targets: the Vinext/Sites bundle in `dist` and the
+native Next.js/Vercel bundle in `.next`.
+
+## Vercel deployment
+
+The committed `vercel.json` selects the native Next.js build, so Vercel
+receives the `.next` output it expects. Keep the project Framework Preset set
+to **Next.js** and do not configure a custom Output Directory.
+
+Before accepting live signups, install Neon from the Vercel Marketplace so the
+project receives a server-only `DATABASE_URL`. The Vercel build applies the
+committed Postgres migrations when that variable is present; it fails the
+deployment if a configured database cannot be migrated. An optional
+`MIGRATION_DATABASE_URL` can provide a separate schema-owner credential while
+`DATABASE_URL` remains the restricted runtime credential.
+
+Run `npm run db:migrate:postgres` to apply the same migrations manually. Scope
+Preview deployments to a separate Neon branch when test signups must not enter
+the production database.
+
+Vercel's `VERCEL_PROJECT_PRODUCTION_URL` provides the canonical metadata origin
+when system environment variables are exposed. Set `NEXT_PUBLIC_SITE_URL` to
+the final HTTPS origin when an explicit canonical domain is preferred.
+
+The Sites deployment continues to use its existing D1 binding and does not
+require `DATABASE_URL`.
 
 ## Signup API
 
@@ -58,8 +88,8 @@ All signup paths post JSON to `POST /api/interest`:
 
 The endpoint performs server-side Zod validation, rejects oversized payloads
 and the honeypot field, deduplicates retries with a client-generated request
-ID, and applies a hashed-IP D1 rate limit. It returns structured field errors
-without echoing private submission data.
+ID, and applies the same hashed-IP database rate limit through D1 or Postgres.
+It returns structured field errors without echoing private submission data.
 
 ## Search and sharing
 

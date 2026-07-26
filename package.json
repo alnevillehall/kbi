@@ -7,14 +7,22 @@
   },
   "scripts": {
     "dev": "vinext dev",
+    "dev:vercel": "next dev",
     "build": "vinext build",
+    "build:vercel": "node scripts/build-vercel.mjs",
     "start": "vinext start",
-    "test": "npm run lint && npm run typecheck && npm run build",
+    "start:vercel": "next start",
+    "test": "npm run lint && npm run typecheck && npm run build && npm run build:vercel",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "typecheck": "tsc --noEmit",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "npm run db:generate:d1",
+    "db:generate:d1": "drizzle-kit generate",
+    "db:generate:postgres": "drizzle-kit generate --config=drizzle.postgres.config.ts",
+    "db:migrate:postgres": "node scripts/build-vercel.mjs --migrate-only"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "@next/env": "^16.2.12",
     "drizzle-orm": "0.45.2",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.27.0",

@@ -10,6 +10,12 @@ export async function getSiteUrl(): Promise<URL> {
     return parsedUrl;
   }
 
+  const vercelProductionHost =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (vercelProductionHost) {
+    return new URL(`https://${vercelProductionHost}`);
+  }
+
   const headerList = await headers();
   const host = headerList.get("x-forwarded-host") ?? headerList.get("host");
   const isTrustedRequestHost =

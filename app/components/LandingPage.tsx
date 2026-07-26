@@ -66,7 +66,7 @@ type FeatureKey = "discover" | "details" | "track" | "checkout";
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
 function Image(props: ComponentProps<typeof NextImage>) {
-  return <NextImage {...props} unoptimized />;
+  return <NextImage {...props} />;
 }
 
 const featureTabs: Array<{
