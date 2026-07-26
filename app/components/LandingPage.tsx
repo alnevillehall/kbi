@@ -66,12 +66,7 @@ type FeatureKey = "discover" | "details" | "track" | "checkout";
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
 function Image(props: ComponentProps<typeof NextImage>) {
-  return (
-    <NextImage
-      {...props}
-      unoptimized={process.env.NODE_ENV !== "production"}
-    />
-  );
+  return <NextImage {...props} unoptimized />;
 }
 
 const featureTabs: Array<{
@@ -514,7 +509,12 @@ function FeatureScreen({ active }: { active: FeatureKey }) {
                 <span>Portland Pot</span>
               </div>
               <div>
-                <Image src="/sweet-beans.jpg" alt="" fill sizes="120px" />
+                <Image
+                  src="/sweet-beans.jpg"
+                  alt=""
+                  fill
+                  sizes="120px"
+                />
                 <span>Sweet Spot</span>
               </div>
             </div>
